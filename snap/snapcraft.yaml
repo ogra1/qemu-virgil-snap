@@ -27,6 +27,10 @@ description: |
 grade: stable
 confinement: strict
 
+architectures:
+  - build-on: amd64
+    run-on: amd64
+
 apps:
   qemu-virgil:
     command: bin/runner $SNAP/usr/bin/qemu-system-x86_64
