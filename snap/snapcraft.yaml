@@ -1,5 +1,6 @@
 name: qemu-virgil
 adopt-info: qemu
+base: core18
 summary: QEMU as a snap, built from latest git with some fancy graphics extras
 description: |
   The latest QEMU as a snap package with GTK, SDL2 and Virgil 3D enabled
@@ -28,19 +29,19 @@ confinement: strict
 
 apps:
   qemu-virgil:
-    command: usr/bin/qemu-system-x86_64
+    command: bin/runner $SNAP/usr/bin/qemu-system-x86_64
     environment:
-        LIBGL_DRIVERS_PATH: $SNAP/usr/lib/x86_64-linux-gnu/dri:/var/lib/snapd/lib/gl/xorg
-        LD_LIBRARY_PATH: $SNAP/usr/lib/qemu:$SNAP/usr/lib/x86_64-linux-gnu/mesa:$SNAP/usr/lib/x86_64-linux-gnu/mesa-egl:$SNAP/usr/lib/x86_64-linux-gnu/dri:/var/lib/snapd/lib/gl/xorg:$SNAP/usr/lib/x86_64-linux-gnu/pulseaudio:$LD_LIBRARY_PATH
-        QEMU_AUDIO_DRV: pa
+        LD_LIBRARY_PATH: $SNAP/usr/lib/qemu:$SNAP/usr/lib/x86_64-linux-gnu/mesa:$SNAP/usr/lib/x86_64-linux-gnu/mesa-egl:$SNAP/usr/lib/x86_64-linux-gnu/dri:/var/lib/snapd/lib/gl/xorg:$SNAP/usr/lib/x86_64-linux-gnu/pulseaudio:$SNAP/usr/lib/x86_64-linux-gnu/ceph:$LD_LIBRARY_PATH
         FONTCONFIG_PATH: $SNAP/etc/fonts/conf.d
         FONTCONFIG_FILE: $SNAP_DATA/fonts.conf
         GDK_PIXBUF_MODULE_FILE: $SNAP_DATA/.gdk-pixbuf-loaders.cache
         XDG_DATA_DIRS: $SNAP/usr/share
+        XDG_CACHE_HOME: $SNAP_USER_DATA/.cache
     plugs:
+      - audio-playback
+      - audio-record
       - x11
       - kvm
-      - pulseaudio
       - desktop
       - home
       - opengl
@@ -52,19 +53,19 @@ apps:
       - unity7
       - wayland
   arm64:
-    command: usr/bin/qemu-system-aarch64
+    command: bin/runner $SNAP/usr/bin/qemu-system-aarch64
     environment:
-        LIBGL_DRIVERS_PATH: $SNAP/usr/lib/x86_64-linux-gnu/dri:/var/lib/snapd/lib/gl/xorg
-        LD_LIBRARY_PATH: $SNAP/usr/lib/qemu:$SNAP/usr/lib/x86_64-linux-gnu/mesa:$SNAP/usr/lib/x86_64-linux-gnu/mesa-egl:$SNAP/usr/lib/x86_64-linux-gnu/dri:/var/lib/snapd/lib/gl/xorg:$SNAP/usr/lib/x86_64-linux-gnu/pulseaudio:$LD_LIBRARY_PATH
-        QEMU_AUDIO_DRV: pa
+        LD_LIBRARY_PATH: $SNAP/usr/lib/qemu:$SNAP/usr/lib/x86_64-linux-gnu/mesa:$SNAP/usr/lib/x86_64-linux-gnu/mesa-egl:$SNAP/usr/lib/x86_64-linux-gnu/dri:/var/lib/snapd/lib/gl/xorg:$SNAP/usr/lib/x86_64-linux-gnu/pulseaudio:$SNAP/usr/lib/x86_64-linux-gnu/ceph:$LD_LIBRARY_PATH
         FONTCONFIG_PATH: $SNAP/etc/fonts/conf.d
         FONTCONFIG_FILE: $SNAP_DATA/fonts.conf
         GDK_PIXBUF_MODULE_FILE: $SNAP_DATA/.gdk-pixbuf-loaders.cache
         XDG_DATA_DIRS: $SNAP/usr/share
+        XDG_CACHE_HOME: $SNAP_USER_DATA/.cache
     plugs:
+      - audio-playback
+      - audio-record
       - x11
       - kvm
-      - pulseaudio
       - desktop
       - home
       - opengl
@@ -76,19 +77,19 @@ apps:
       - unity7
       - wayland
   arm:
-    command: usr/bin/qemu-system-arm
+    command: bin/runner $SNAP/usr/bin/qemu-system-arm
     environment:
-        LIBGL_DRIVERS_PATH: $SNAP/usr/lib/x86_64-linux-gnu/dri:/var/lib/snapd/lib/gl/xorg
-        LD_LIBRARY_PATH: $SNAP/usr/lib/qemu:$SNAP/usr/lib/x86_64-linux-gnu/mesa:$SNAP/usr/lib/x86_64-linux-gnu/mesa-egl:$SNAP/usr/lib/x86_64-linux-gnu/dri:/var/lib/snapd/lib/gl/xorg:$SNAP/usr/lib/x86_64-linux-gnu/pulseaudio:$LD_LIBRARY_PATH
-        QEMU_AUDIO_DRV: pa
+        LD_LIBRARY_PATH: $SNAP/usr/lib/qemu:$SNAP/usr/lib/x86_64-linux-gnu/mesa:$SNAP/usr/lib/x86_64-linux-gnu/mesa-egl:$SNAP/usr/lib/x86_64-linux-gnu/dri:/var/lib/snapd/lib/gl/xorg:$SNAP/usr/lib/x86_64-linux-gnu/pulseaudio:$SNAP/usr/lib/x86_64-linux-gnu/ceph:$LD_LIBRARY_PATH
         FONTCONFIG_PATH: $SNAP/etc/fonts/conf.d
         FONTCONFIG_FILE: $SNAP_DATA/fonts.conf
         GDK_PIXBUF_MODULE_FILE: $SNAP_DATA/.gdk-pixbuf-loaders.cache
         XDG_DATA_DIRS: $SNAP/usr/share
+        XDG_CACHE_HOME: $SNAP_USER_DATA/.cache
     plugs:
+      - audio-playback
+      - audio-record
       - x11
       - kvm
-      - pulseaudio
       - desktop
       - home
       - opengl
@@ -107,6 +108,7 @@ apps:
 parts:
   virgl:
     source: git://anongit.freedesktop.org/virglrenderer
+    source-tag: virglrenderer-0.8.0
     plugin: autotools
     build-packages:
       - libgbm-dev
@@ -121,6 +123,7 @@ parts:
   qemu:
     after: [ virgl ]
     source: git://git.qemu.org/qemu.git
+    source-tag: v4.2.0
     plugin: nil
     override-build: |
       set -e
@@ -183,9 +186,9 @@ parts:
       - libatk-bridge2.0-0
       - libatspi2.0-0
       - libbluetooth3
-      - libboost-iostreams1.58.0
-      - libboost-random1.58.0
-      - libboost-thread1.58.0
+      - libboost-iostreams1.65.1
+      - libboost-random1.65.1
+      - libboost-thread1.65.1
       - libbrlapi0.6
       - libcairo2
       - libcairo-gobject2
@@ -202,11 +205,11 @@ parts:
       - libheimbase1-heimdal
       - libheimntlm0-heimdal
       - libhx509-5-heimdal
-      - libiscsi2
+      - libiscsi7
       - libjpeg-turbo8
       - libkrb5-26-heimdal
       - libldap-2.4-2
-      - libnfs8
+      - libnfs11
       - libnspr4
       - libnss3
       - libnuma1
@@ -222,23 +225,26 @@ parts:
       - librtmp1
       - libsasl2-2
       - libsdl2-2.0-0
+      - libsdl2-image-2.0-0
       - libssh2-1
       - libsnappy1v5
       - libsndfile1
       - libsndio6.1
       - libthai0
+      - libusb-1.0-0
       - libvdeplug2
       - libvorbis0a
       - libvorbisenc2
       - libvte-2.91-0
       - libwayland-cursor0
       - libwayland-egl1-mesa
+      - libwebp6
       - libwind0-heimdal
       - libxcb-render0
       - libxcb-shm0
       - libxcomposite1
       - libxcursor1
-      - libxen-4.6
+      - libxen-4.9
       - libxenstore3.0
       - libxi6
       - libxinerama1
@@ -246,3 +252,10 @@ parts:
       - libxrender1
       - libxss1
       - ttf-ubuntu-font-family
+  runner:
+    after: [ qemu ]
+    source: .
+    plugin: nil
+    override-build: |
+      mkdir -p $SNAPCRAFT_PART_INSTALL/bin
+      cp -av runner $SNAPCRAFT_PART_INSTALL/bin/
