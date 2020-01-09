@@ -140,6 +140,7 @@ parts:
       # fix execstack warning of review tools
       rm -fv $SNAPCRAFT_PART_INSTALL/usr/share/qemu/s390-ccw.img
       rm -fv $SNAPCRAFT_PART_INSTALL/usr/share/qemu/s390-netboot.img
+      rm -fv $SNAPCRAFT_PART_INSTALL/usr/share/qemu/openbios-ppc
       # set version
       snapcraftctl set-version "$(cat VERSION)"
     build-packages:
