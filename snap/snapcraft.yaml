@@ -164,7 +164,8 @@ parts:
       - libseccomp-dev
       - libsnappy-dev
       - libssh2-1-dev
-      - libusb-1.0-0-dev
+      - libusb-dev
+      - libusbredirparser-dev
       - libvde-dev
       - libvdeplug-dev
       - libvte-2.91-dev
@@ -236,7 +237,8 @@ parts:
       - libsndfile1
       - libsndio6.1
       - libthai0
-      - libusb-1.0-0
+      - libusb-0.1-4
+      - libusbredirparser1
       - libvdeplug2
       - libvorbis0a
       - libvorbisenc2
