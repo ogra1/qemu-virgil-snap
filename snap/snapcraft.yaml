@@ -132,7 +132,7 @@ parts:
     override-build: |
       set -e
       ./configure --target-list=x86_64-softmmu,aarch64-softmmu,arm-softmmu \
-        --audio-drv-list=pa --prefix=/usr
+        --audio-drv-list=pa --prefix=/usr --enable-libusb --enable-usb-redir
       make
       make DESTDIR=$SNAPCRAFT_PART_INSTALL install
       # fix execstack warning of review tools
