@@ -50,6 +50,7 @@ apps:
       - home
       - opengl
       - raw-usb
+      - removable-media
       - screen-inhibit-control
       - network
       - network-bind
