@@ -46,9 +46,7 @@ apps:
     plugs:
       - audio-playback
       - audio-record
-      - x11
       - kvm
-      - desktop
       - home
       - opengl
       - raw-usb
@@ -58,7 +56,6 @@ apps:
       - network-bind
       - network-control
       - unity7
-      - wayland
   arm64:
     extensions: [gnome-3-28]
     command: usr/bin/qemu-system-aarch64
@@ -73,9 +70,7 @@ apps:
     plugs:
       - audio-playback
       - audio-record
-      - x11
       - kvm
-      - desktop
       - home
       - opengl
       - raw-usb
@@ -84,7 +79,6 @@ apps:
       - network-bind
       - network-control
       - unity7
-      - wayland
   arm:
     extensions: [gnome-3-28]
     command: usr/bin/qemu-system-arm
@@ -99,9 +93,7 @@ apps:
     plugs:
       - audio-playback
       - audio-record
-      - x11
       - kvm
-      - desktop
       - home
       - opengl
       - raw-usb
@@ -110,7 +102,6 @@ apps:
       - network-bind
       - network-control
       - unity7
-      - wayland
   qemu-img:
     command: usr/bin/qemu-img
     plugs:
