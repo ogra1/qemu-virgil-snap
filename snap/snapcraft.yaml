@@ -96,6 +96,7 @@ parts:
     plugin: autotools
     configflags:
       - --prefix=/usr
+      - --enable-gbm-allocation
     build-packages:
       - libgbm-dev
       - libdrm-dev
