@@ -171,8 +171,6 @@ parts:
       - libflac8
       - libiscsi7
       - libnfs11
-      - libnspr4
-      - libnss3
       - libnuma1
       - librados2
       - librbd1
