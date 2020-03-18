@@ -170,7 +170,6 @@ parts:
       - libbrlapi0.6
       - libflac8
       - libiscsi7
-      - libjpeg-turbo8
       - libnfs11
       - libnspr4
       - libnss3
