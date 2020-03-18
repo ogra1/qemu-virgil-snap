@@ -94,6 +94,8 @@ parts:
     source: git://anongit.freedesktop.org/virglrenderer
     source-tag: virglrenderer-0.8.0
     plugin: autotools
+    configflags:
+      - --prefix=/usr
     build-packages:
       - libgbm-dev
       - libdrm-dev
