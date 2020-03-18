@@ -157,6 +157,7 @@ parts:
       - libxen-dev
       - liblzo2-dev
       - libx11-dev
+      - libxml2-dev
       - libepoxy-dev
       - libglib2.0-dev
       - libfdt-dev
