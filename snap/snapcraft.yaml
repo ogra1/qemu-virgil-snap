@@ -33,7 +33,9 @@ architectures:
 
 apps:
   qemu-virgil:
-    command: bin/runner $SNAP/usr/bin/qemu-system-x86_64
+    extensions: [gnome-3-28]
+    command: usr/bin/qemu-system-x86_64
+    command-chain: [bin/runner]
     environment:
         LD_LIBRARY_PATH: $SNAP/usr/lib/qemu:$SNAP/usr/lib/x86_64-linux-gnu/mesa:$SNAP/usr/lib/x86_64-linux-gnu/mesa-egl:$SNAP/usr/lib/x86_64-linux-gnu/dri:/var/lib/snapd/lib/gl/xorg:$SNAP/usr/lib/x86_64-linux-gnu/pulseaudio:$SNAP/usr/lib/x86_64-linux-gnu/ceph:$LD_LIBRARY_PATH
         FONTCONFIG_PATH: $SNAP/etc/fonts/conf.d
@@ -58,7 +60,9 @@ apps:
       - unity7
       - wayland
   arm64:
-    command: bin/runner $SNAP/usr/bin/qemu-system-aarch64
+    extensions: [gnome-3-28]
+    command: usr/bin/qemu-system-aarch64
+    command-chain: [bin/runner]
     environment:
         LD_LIBRARY_PATH: $SNAP/usr/lib/qemu:$SNAP/usr/lib/x86_64-linux-gnu/mesa:$SNAP/usr/lib/x86_64-linux-gnu/mesa-egl:$SNAP/usr/lib/x86_64-linux-gnu/dri:/var/lib/snapd/lib/gl/xorg:$SNAP/usr/lib/x86_64-linux-gnu/pulseaudio:$SNAP/usr/lib/x86_64-linux-gnu/ceph:$LD_LIBRARY_PATH
         FONTCONFIG_PATH: $SNAP/etc/fonts/conf.d
@@ -82,7 +86,9 @@ apps:
       - unity7
       - wayland
   arm:
-    command: bin/runner $SNAP/usr/bin/qemu-system-arm
+    extensions: [gnome-3-28]
+    command: usr/bin/qemu-system-arm
+    command-chain: [bin/runner]
     environment:
         LD_LIBRARY_PATH: $SNAP/usr/lib/qemu:$SNAP/usr/lib/x86_64-linux-gnu/mesa:$SNAP/usr/lib/x86_64-linux-gnu/mesa-egl:$SNAP/usr/lib/x86_64-linux-gnu/dri:/var/lib/snapd/lib/gl/xorg:$SNAP/usr/lib/x86_64-linux-gnu/pulseaudio:$SNAP/usr/lib/x86_64-linux-gnu/ceph:$LD_LIBRARY_PATH
         FONTCONFIG_PATH: $SNAP/etc/fonts/conf.d
