@@ -131,7 +131,8 @@ parts:
     override-build: |
       set -e
       ./configure --target-list=x86_64-softmmu,aarch64-softmmu,arm-softmmu \
-        --audio-drv-list=pa --prefix=/usr --enable-libusb --enable-usb-redir
+        --audio-drv-list=pa --prefix=/usr --enable-libusb --enable-usb-redir \
+        --enable-sdl
       make
       make DESTDIR=$SNAPCRAFT_PART_INSTALL install
       # fix execstack warning of review tools
@@ -159,7 +160,8 @@ parts:
       - librbd-dev
       - librdmacm-dev
       - libsasl2-dev
-      - libsdl1.2-dev
+      - libsdl2-dev
+      - libsdl2-image-dev
       - libseccomp-dev
       - libsnappy-dev
       - libssh2-1-dev
