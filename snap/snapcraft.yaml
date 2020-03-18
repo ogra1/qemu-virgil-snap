@@ -104,14 +104,16 @@ parts:
     after: [ virgl ]
     source: git://git.qemu.org/qemu.git
     source-tag: v4.2.0
-    plugin: nil
+    plugin: autotools
+    configflags:
+      - --prefix=/usr
+      - --target-list=x86_64-softmmu,aarch64-softmmu,arm-softmmu
+      - --audio-drv-list=pa
+      - --enable-libusb
+      - --enable-usb-redir
+      - --enable-sdl
     override-build: |
-      set -e
-      ./configure --target-list=x86_64-softmmu,aarch64-softmmu,arm-softmmu \
-        --audio-drv-list=pa --prefix=/usr --enable-libusb --enable-usb-redir \
-        --enable-sdl
-      make
-      make DESTDIR=$SNAPCRAFT_PART_INSTALL install
+      snapcraftctl build
       # fix execstack warning of review tools
       rm -fv $SNAPCRAFT_PART_INSTALL/usr/share/qemu/s390-ccw.img
       rm -fv $SNAPCRAFT_PART_INSTALL/usr/share/qemu/s390-netboot.img
