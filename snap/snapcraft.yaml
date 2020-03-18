@@ -74,6 +74,7 @@ apps:
       - home
       - opengl
       - raw-usb
+      - removable-media
       - screen-inhibit-control
       - network
       - network-bind
@@ -97,6 +98,7 @@ apps:
       - home
       - opengl
       - raw-usb
+      - removable-media
       - screen-inhibit-control
       - network
       - network-bind
@@ -106,6 +108,7 @@ apps:
     command: usr/bin/qemu-img
     plugs:
       - home
+      - removable-media
 
 parts:
   virgl:
