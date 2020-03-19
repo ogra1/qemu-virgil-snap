@@ -120,11 +120,6 @@ parts:
       - --enable-spice
     override-build: |
       snapcraftctl build
-      # fix execstack warning of review tools
-      rm -fv $SNAPCRAFT_PART_INSTALL/usr/share/qemu/s390-ccw.img
-      rm -fv $SNAPCRAFT_PART_INSTALL/usr/share/qemu/s390-netboot.img
-      rm -fv $SNAPCRAFT_PART_INSTALL/usr/share/qemu/openbios-ppc
-      # set version
       snapcraftctl set-version "$(cat VERSION)"
     build-packages:
       - bison
@@ -194,6 +189,12 @@ parts:
       - libxi6
       - libxinerama1
       - libxss1
+    prime:
+      # Fix execstack warnings
+      - -usr/share/qemu/s390-ccw.img
+      - -usr/share/qemu/s390-netboot.img
+      # Remove cruft
+      - -usr/share/qemu/qemu-nsis.bmp
   runner:
     after: [ qemu ]
     source: .
