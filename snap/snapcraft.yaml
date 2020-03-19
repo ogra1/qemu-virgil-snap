@@ -200,12 +200,8 @@ parts:
       - -usr/share/qemu/s390-netboot.img
       # Remove cruft
       - -usr/share/qemu/qemu-nsis.bmp
-  ovmf:
-    after: [ qemu ]
-    plugin: dump
-    source: http://de.archive.ubuntu.com/ubuntu/pool/main/e/edk2/ovmf_0~20191122.bd85bf54-2ubuntu1_all.deb
   runner:
-    after: [ ovmf ]
+    after: [ qemu ]
     source: .
     plugin: nil
     override-build: |
