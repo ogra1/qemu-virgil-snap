@@ -117,6 +117,7 @@ parts:
       - --enable-libusb
       - --enable-usb-redir
       - --enable-sdl
+      - --enable-spice
     override-build: |
       snapcraftctl build
       # fix execstack warning of review tools
@@ -148,7 +149,8 @@ parts:
       - libsdl2-image-dev
       - libseccomp-dev
       - libsnappy-dev
-      - libssh2-1-dev
+      - libspice-protocol-dev
+      - libspice-server-dev
       - libusb-1.0-0-dev
       - libusbredirparser-dev
       - libvde-dev
@@ -183,6 +185,7 @@ parts:
       - libsdl2-image-2.0-0
       - libsnappy1v5
       - libsndio6.1
+      - libspice-server1
       - libusb-1.0-0
       - libusbredirparser1
       - libvdeplug2
