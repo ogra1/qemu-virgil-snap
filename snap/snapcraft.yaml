@@ -248,3 +248,4 @@ parts:
         rm -rf $SNAPCRAFT_PRIME/usr/share/$CRUFT
       done
       find $SNAPCRAFT_PRIME/usr/share/doc/ -type f -not -name 'copyright' -delete
+      find $SNAPCRAFT_PRIME/usr/share -type d -empty -delete
