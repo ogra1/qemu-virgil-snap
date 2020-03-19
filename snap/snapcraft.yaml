@@ -192,7 +192,6 @@ parts:
       - libxen-4.9
       - libxenstore3.0
       - libxi6
-      - libxinerama1
       - libxss1
     prime:
       # Fix execstack warnings
