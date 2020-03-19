@@ -119,6 +119,7 @@ parts:
       - --enable-usb-redir
       - --enable-sdl
       - --enable-spice
+      - --enable-xfsctl
     override-build: |
       snapcraftctl build
       snapcraftctl set-version "$(cat VERSION)"
@@ -161,6 +162,7 @@ parts:
       - libglib2.0-dev
       - libfdt-dev
       - libpixman-1-dev
+      - xfslibs-dev
       - zlib1g-dev
       - libnfs-dev
       - libiscsi-dev
