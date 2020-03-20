@@ -6,13 +6,4 @@ if echo "$@" |grep -q soundhw; then
     export QEMU_PA_SERVER="/run/user/$(id -u)/pulse/native"
 fi
 
-# set proper LIBGL_DRIVERS_PATH for nvidia
-if [ -e "/var/lib/snapd/lib/gl/xorg/nvidia_drv.so" ]; then
-    # special case for nvidia
-    export LIBGL_DRIVERS_PATH=/var/lib/snapd/lib/gl/xorg
-    export LD_LIBRARY_PATH=/var/lib/snapd/lib/gl:$LD_LIBRARY_PATH
-else
-    export LIBGL_DRIVERS_PATH=$SNAP/usr/lib/x86_64-linux-gnu/dri
-fi
-
 exec "$@"
