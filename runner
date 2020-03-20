@@ -3,7 +3,7 @@
 # set pulse when using old -soundhw option
 if echo "$@" |grep -q soundhw; then
     export QEMU_AUDIO_DRV="pa"
-    export QEMU_PA_SERVER=$PULSE_SERVER
+    export QEMU_PA_SERVER="unix:$XDG_RUNTIME_DIR/pulse/native"
 fi
 
 exec "$@"
