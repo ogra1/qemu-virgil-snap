@@ -116,7 +116,7 @@ parts:
     configflags:
       - --prefix=/usr
       - --target-list=x86_64-softmmu,aarch64-softmmu,arm-softmmu
-      - --audio-drv-list=pa
+      - --audio-drv-list=pa,sdl
       - --enable-jemalloc
       - --enable-libusb
       - --enable-usb-redir
