@@ -200,6 +200,7 @@ parts:
       # Fix execstack warnings
       - -usr/share/qemu/s390-ccw.img
       - -usr/share/qemu/s390-netboot.img
+      - -usr/share/qemu/openbios-ppc
       # Remove cruft
       - -usr/share/qemu/qemu-nsis.bmp
   runner:
@@ -226,6 +227,8 @@ parts:
       - usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libndr-standard.so*
       - usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libnetapi.so*
       - usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libpopt.so*
+      - usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libpython2.7.so*
+      - usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libpytalloc-util.so*
       - usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libsamba-*.so*
       - usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libsamdb.so*
       - usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libsmbconf.so*
