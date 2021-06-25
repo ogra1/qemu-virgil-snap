@@ -30,6 +30,8 @@ confinement: strict
 architectures:
   - build-on: amd64
     run-on: amd64
+  - build-on: arm64
+    run-on: arm64
 
 layout:
   /usr/sbin/smbd:
@@ -110,7 +112,7 @@ parts:
   qemu:
     after: [ virgl ]
     source: git://git.qemu.org/qemu.git
-    source-tag: v4.2.0
+    source-tag: v6.0.0
     source-depth: 1
     plugin: autotools
     configflags:
