@@ -172,6 +172,7 @@ parts:
       - libnfs-dev
       - libiscsi-dev
       - libpulse-dev
+      - ninja-build
     stage-packages:
       - libaio1
       - libbluetooth3
