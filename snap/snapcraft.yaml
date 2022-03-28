@@ -242,6 +242,12 @@ parts:
       - libxentoolcore1
       - libxentoollog1
     prime:
+      # Fix execstack warnings
+      - -usr/share/qemu/s390-ccw.img
+      - -usr/share/qemu/s390-netboot.img
+      - -usr/share/qemu/openbios-ppc
+      # Remove cruft
+      - -usr/share/qemu/qemu-nsis.bmp
       - -lib/systemd/system/multipath-tools-boot.service
   runner:
     after: [ qemu ]
