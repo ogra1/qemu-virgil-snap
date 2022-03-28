@@ -36,6 +36,8 @@ layout:
     bind-file: $SNAP/usr/sbin/smbd
   /usr/share/seabios:
     bind: $SNAP/usr/share/seabios
+  /usr/share/qemu:
+    bind: $SNAP/usr/share/qemu
 
 apps:
   qemu-virgil:
