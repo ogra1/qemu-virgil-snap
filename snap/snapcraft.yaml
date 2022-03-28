@@ -241,6 +241,8 @@ parts:
       - libxenstore3.0
       - libxentoolcore1
       - libxentoollog1
+    prime:
+      - -lib/systemd/system/multipath-tools-boot.service
   runner:
     after: [ qemu ]
     source: .
