@@ -149,6 +149,7 @@ parts:
       - libbz2-dev
       - libcap-dev
       - libcap-ng-dev
+      - libcacard-dev
       - libcurl4-gnutls-dev
       - libepoxy-dev
       - libfdt-dev
@@ -190,6 +191,7 @@ parts:
     stage-packages:
       - libaio1
       - libasn1-8-heimdal
+      - libcacard0
       - libcurl3-gnutls
       - libgssapi3-heimdal
       - libhcrypto4-heimdal
