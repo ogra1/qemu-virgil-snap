@@ -34,6 +34,8 @@ architectures:
 layout:
   /usr/sbin/smbd:
     bind-file: $SNAP/usr/sbin/smbd
+  /usr/share/seabios:
+    bind: $SNAP/usr/share/seabios
 
 apps:
   qemu-virgil:
@@ -243,6 +245,9 @@ parts:
       - libxenstore3.0
       - libxentoolcore1
       - libxentoollog1
+      - seabios
+      - ipxe-qemu
+      - ipxe-qemu-256k-compat-efi-roms
     prime:
       # Fix execstack warnings
       - -usr/share/qemu/s390-ccw.img
