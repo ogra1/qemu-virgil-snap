@@ -1,6 +1,6 @@
 name: qemu-virgil
 adopt-info: qemu
-base: core18
+base: core20
 summary: QEMU as a snap, built from latest git with some fancy graphics extras
 description: |
   The latest QEMU as a snap package with GTK, SDL2 and Virgil 3D enabled
@@ -17,9 +17,9 @@ description: |
 
   Then you can run the VM like below.
 
-  qemu-virgil -enable-kvm -m 512 -device virtio-vga,virgl=on -display sdl,gl=on \
+  qemu-virgil -enable-kvm -m 2048 -device AC97 -device virtio-vga-gl -display sdl,gl=on \
     -netdev user,id=ethernet.0,hostfwd=tcp::10022-:22 -device rtl8139,netdev=ethernet.0 \
-    -soundhw ac97 some.img
+    -soundhw ac97 /path/to/someimage.img
 
   For qemu-system-arm and qemu-system-aarch64 VMs the snap ships the
   qemu-virgil.arm and qemu-virgil.arm64 commands.
@@ -37,15 +37,18 @@ layout:
 
 apps:
   qemu-virgil:
-    extensions: [gnome-3-28]
+    extensions: [gnome-3-38]
     command: usr/bin/qemu-system-x86_64
     command-chain: [bin/runner]
+    environment:
+      LD_LIBRARY_PATH: $SNAP_LIBRARY_PATH:$SNAP/lib/x86_64-linux-gnu:$SNAP/usr/lib/x86_64-linux-gnu:$SNAP/usr/lib:$SNAP/usr/lib/x86_64-linux-gnu/ceph:$SNAP/gnome-platform/usr/lib:$SNAP/gnome-platform/usr/lib/x86_64-linux-gnu:$SNAP/gnome-platform/usr/lib/x86_64-linux-gnu/pulseaudio
     plugs:
       - audio-playback
       - audio-record
       - kvm
       - home
       - opengl
+      - process-control
       - raw-usb
       - removable-media
       - screen-inhibit-control
@@ -54,15 +57,18 @@ apps:
       - network-control
       - unity7
   arm64:
-    extensions: [gnome-3-28]
+    extensions: [gnome-3-38]
     command: usr/bin/qemu-system-aarch64
     command-chain: [bin/runner]
+    environment:
+      LD_LIBRARY_PATH: $SNAP_LIBRARY_PATH:$SNAP/lib/x86_64-linux-gnu:$SNAP/usr/lib/x86_64-linux-gnu:$SNAP/usr/lib:$SNAP/usr/lib/x86_64-linux-gnu/ceph:$SNAP/gnome-platform/usr/lib:$SNAP/gnome-platform/usr/lib/x86_64-linux-gnu:$SNAP/gnome-platform/usr/lib/x86_64-linux-gnu/pulseaudio
     plugs:
       - audio-playback
       - audio-record
       - kvm
       - home
       - opengl
+      - process-control
       - raw-usb
       - removable-media
       - screen-inhibit-control
@@ -71,15 +77,18 @@ apps:
       - network-control
       - unity7
   arm:
-    extensions: [gnome-3-28]
+    extensions: [gnome-3-38]
     command: usr/bin/qemu-system-arm
     command-chain: [bin/runner]
+    environment:
+      LD_LIBRARY_PATH: $SNAP_LIBRARY_PATH:$SNAP/lib/x86_64-linux-gnu:$SNAP/usr/lib/x86_64-linux-gnu:$SNAP/usr/lib:$SNAP/usr/lib/x86_64-linux-gnu/ceph:$SNAP/gnome-platform/usr/lib:$SNAP/gnome-platform/usr/lib/x86_64-linux-gnu:$SNAP/gnome-platform/usr/lib/x86_64-linux-gnu/pulseaudio
     plugs:
       - audio-playback
       - audio-record
       - kvm
       - home
       - opengl
+      - process-control
       - raw-usb
       - removable-media
       - screen-inhibit-control
@@ -88,7 +97,7 @@ apps:
       - network-control
       - unity7
   qemu-img:
-    extensions: [gnome-3-28]
+    extensions: [gnome-3-38]
     command: usr/bin/qemu-img
     plugs:
       - home
@@ -96,24 +105,22 @@ apps:
 
 parts:
   virgl:
-    source: git://anongit.freedesktop.org/virglrenderer
-    source-tag: virglrenderer-0.8.0
+    source: https://gitlab.freedesktop.org/virgl/virglrenderer.git
+    source-tag: virglrenderer-0.9.1
     source-depth: 1
-    plugin: autotools
-    configflags:
+    plugin: meson
+    meson-parameters:
       - --prefix=/usr
-      - --enable-gbm-allocation
     build-packages:
       - libgbm-dev
       - libdrm-dev
-      - libepoxy-dev
   qemu:
     after: [ virgl ]
     source: git://git.qemu.org/qemu.git
-    source-tag: v4.2.0
+    source-tag: v6.2.0
     source-depth: 1
     plugin: autotools
-    configflags:
+    autotools-configure-parameters:
       - --prefix=/usr
       - --target-list=x86_64-softmmu,aarch64-softmmu,arm-softmmu
       - --audio-drv-list=pa,sdl
@@ -123,6 +130,12 @@ parts:
       - --enable-sdl
       - --enable-spice
       - --enable-xfsctl
+    build-environment:
+      - ACLOCAL_PATH: /usr/share/aclocal
+      - PKG_CONFIG_PATH: $SNAPCRAFT_STAGE/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pkgconfig:/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pkgconfig:/usr/lib/pkgconfig:/usr/share/pkgconfig
+      - PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/snapcraft/current/bin/scriptlet-bin
+      - LD_LIBRARY_PATH: $SNAPCRAFT_STAGE/usr/lib/$SNAPCRAFT_ARCH_TRIPLET:/usr/lib/$SNAPCRAFT_ARCH_TRIPLET:$LD_LIBRARY_PATH
+    #        #      - CFLAGS: "-Wno-error"
     override-build: |
       snapcraftctl build
       snapcraftctl set-version "$(cat VERSION)"
@@ -137,18 +150,28 @@ parts:
       - libcap-dev
       - libcap-ng-dev
       - libcurl4-gnutls-dev
+      - libepoxy-dev
+      - libfdt-dev
       - libgtk-3-dev
+      - libglib2.0-dev
+      - libglusterfs-dev
       - libibverbs-dev
+      - libiscsi-dev
       - libjemalloc-dev
       - libjpeg8-dev
+      - liblzo2-dev
       - libncurses5-dev
+      - libnfs-dev
       - libnuma-dev
+      - libpango1.0-dev
+      - libpixman-1-dev
+      - libpulse-dev
       - librbd-dev
       - librdmacm-dev
       - libsasl2-dev
+      - libseccomp-dev
       - libsdl2-dev
       - libsdl2-image-dev
-      - libseccomp-dev
       - libsnappy-dev
       - libspice-protocol-dev
       - libspice-server-dev
@@ -157,52 +180,67 @@ parts:
       - libvde-dev
       - libvdeplug-dev
       - libvte-2.91-dev
-      - libxen-dev
-      - liblzo2-dev
-      - libx11-dev
       - libxml2-dev
-      - libepoxy-dev
-      - libglib2.0-dev
-      - libfdt-dev
-      - libpixman-1-dev
+      - libx11-dev
+      - libxen-dev
+      - libzstd-dev
+      - ninja-build
       - xfslibs-dev
       - zlib1g-dev
-      - libnfs-dev
-      - libiscsi-dev
-      - libpulse-dev
     stage-packages:
       - libaio1
-      - libbluetooth3
-      - libboost-iostreams1.65.1
-      - libboost-random1.65.1
-      - libboost-thread1.65.1
-      - libbrlapi0.6
-      - libflac8
+      - libasn1-8-heimdal
+      - libcurl3-gnutls
+      - libgssapi3-heimdal
+      - libhcrypto4-heimdal
+      - libheimbase1-heimdal
+      - libheimntlm0-heimdal
+      - libhx509-5-heimdal
+      - libibverbs1
       - libiscsi7
-      - libjemalloc1
-      - libnfs11
+      - libjemalloc2
+      - libkrb5-26-heimdal
+      - libldap-2.4-2
+      - libnghttp2-14
+      - libopus0
+      - librdmacm1
+      - libroken18-heimdal
+      - librtmp1
+      - libsasl2-2
+      - libsdl2-2.0-0
+      - libsdl2-image-2.0-0
+      - libspice-server1
+      - libssh-4
+      - liburcu6
+      - libusb-1.0-0
+      - libusbredirparser1
+      - libwind0-heimdal
+      - libxss1
+      - multipath-tools
+      - libboost-iostreams1.71.0
+      - libboost-thread1.71.0
+      - libbrlapi0.7
+      - libfdt1
+      - libgfapi0
+      - libgfrpc0
+      - libgfxdr0
+      - libglusterfs0
+      - libnfs13
       - libnuma1
       - librados2
       - librbd1
-      - libsdl2-2.0-0
-      - libsdl2-image-2.0-0
       - libsnappy1v5
-      - libsndio6.1
-      - libspice-server1
-      - libusb-1.0-0
-      - libusbredirparser1
+      - libtirpc3
       - libvdeplug2
-      - libxen-4.9
+      - libxencall1
+      - libxendevicemodel1
+      - libxenevtchn1
+      - libxenforeignmemory1
+      - libxengnttab1
+      - libxenmisc4.11
       - libxenstore3.0
-      - libxi6
-      - libxss1
-    prime:
-      # Fix execstack warnings
-      - -usr/share/qemu/s390-ccw.img
-      - -usr/share/qemu/s390-netboot.img
-      - -usr/share/qemu/openbios-ppc
-      # Remove cruft
-      - -usr/share/qemu/qemu-nsis.bmp
+      - libxentoolcore1
+      - libxentoollog1
   runner:
     after: [ qemu ]
     source: .
@@ -214,7 +252,10 @@ parts:
     after: [ runner ]
     plugin: nil
     stage-packages:
+      - python3-ldb
+      - python3-talloc
       - samba
+      - samba-libs
     prime:
       - usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libdcerpc.so*
       - usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libdcerpc-binding.so*
@@ -242,10 +283,10 @@ parts:
   cleanup:
     after: [ smbd ]
     plugin: nil
-    build-snaps: [ gnome-3-28-1804 ]
+    build-snaps: [ gnome-3-38-2004 ]
     override-prime: |
       set -eux
-      cd /snap/gnome-3-28-1804/current
+      cd /snap/gnome-3-38-2004/current
       find . -type f,l -exec rm -f $SNAPCRAFT_PRIME/{} \;
       for CRUFT in bug lintian man; do
         rm -rf $SNAPCRAFT_PRIME/usr/share/$CRUFT
