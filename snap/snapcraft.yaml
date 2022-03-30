@@ -139,7 +139,6 @@ parts:
       - PKG_CONFIG_PATH: $SNAPCRAFT_STAGE/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pkgconfig:/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pkgconfig:/usr/lib/pkgconfig:/usr/share/pkgconfig
       - PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/snapcraft/current/bin/scriptlet-bin
       - LD_LIBRARY_PATH: $SNAPCRAFT_STAGE/usr/lib/$SNAPCRAFT_ARCH_TRIPLET:/usr/lib/$SNAPCRAFT_ARCH_TRIPLET:$LD_LIBRARY_PATH
-    #        #      - CFLAGS: "-Wno-error"
     override-build: |
       snapcraftctl build
       snapcraftctl set-version "$(cat VERSION)"
@@ -181,6 +180,7 @@ parts:
       - libspice-protocol-dev
       - libspice-server-dev
       - libusb-1.0-0-dev
+      - libusbredirhost-dev
       - libusbredirparser-dev
       - libvde-dev
       - libvdeplug-dev
@@ -193,10 +193,20 @@ parts:
       - xfslibs-dev
       - zlib1g-dev
     stage-packages:
+      - ipxe-qemu
+      - ipxe-qemu-256k-compat-efi-roms
       - libaio1
       - libasn1-8-heimdal
+      - libboost-iostreams1.71.0
+      - libboost-thread1.71.0
+      - libbrlapi0.7
       - libcacard0
       - libcurl3-gnutls
+      - libfdt1
+      - libgfapi0
+      - libgfrpc0
+      - libgfxdr0
+      - libglusterfs0
       - libgssapi3-heimdal
       - libhcrypto4-heimdal
       - libheimbase1-heimdal
@@ -207,37 +217,28 @@ parts:
       - libjemalloc2
       - libkrb5-26-heimdal
       - libldap-2.4-2
+      - libnfs13
       - libnghttp2-14
+      - libnuma1
       - libopus0
+      - librados2
+      - librbd1
       - librdmacm1
       - libroken18-heimdal
       - librtmp1
       - libsasl2-2
       - libsdl2-2.0-0
       - libsdl2-image-2.0-0
+      - libsnappy1v5
       - libspice-server1
       - libssh-4
+      - libtirpc3
       - liburcu6
       - libusb-1.0-0
+      - libusbredirhost1
       - libusbredirparser1
-      - libwind0-heimdal
-      - libxss1
-      - multipath-tools
-      - libboost-iostreams1.71.0
-      - libboost-thread1.71.0
-      - libbrlapi0.7
-      - libfdt1
-      - libgfapi0
-      - libgfrpc0
-      - libgfxdr0
-      - libglusterfs0
-      - libnfs13
-      - libnuma1
-      - librados2
-      - librbd1
-      - libsnappy1v5
-      - libtirpc3
       - libvdeplug2
+      - libwind0-heimdal
       - libxencall1
       - libxendevicemodel1
       - libxenevtchn1
@@ -247,9 +248,9 @@ parts:
       - libxenstore3.0
       - libxentoolcore1
       - libxentoollog1
+      - libxss1
+      - multipath-tools
       - seabios
-      - ipxe-qemu
-      - ipxe-qemu-256k-compat-efi-roms
     prime:
       # Fix execstack warnings
       - -usr/share/qemu/s390-ccw.img
@@ -277,6 +278,7 @@ parts:
       - usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libdcerpc.so*
       - usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libdcerpc-binding.so*
       - usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libdcerpc-server.so*
+      - usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libdcerpc-server-core.so*
       - usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libjansson.so*
       - usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libldb.so*
       - usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libndr-krb5pac.so*
@@ -287,6 +289,8 @@ parts:
       - usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libpopt.so*
       - usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libpython2.7.so*
       - usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libpytalloc-util.so*
+      - usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libpyldb-util.cpython-38-x86-64-linux-gnu.so*
+      - usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libpytalloc-util.cpython-38-x86-64-linux-gnu.so*
       - usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libsamba-*.so*
       - usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libsamdb.so*
       - usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libsmbconf.so*
