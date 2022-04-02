@@ -45,7 +45,8 @@ apps:
     command: usr/bin/qemu-system-x86_64
     command-chain: [bin/runner]
     environment:
-      LD_LIBRARY_PATH: $SNAP_LIBRARY_PATH:$SNAP/lib/x86_64-linux-gnu:$SNAP/usr/lib/x86_64-linux-gnu:$SNAP/usr/lib:$SNAP/usr/lib/x86_64-linux-gnu/ceph:$SNAP/gnome-platform/usr/lib:$SNAP/gnome-platform/usr/lib/x86_64-linux-gnu:$SNAP/gnome-platform/usr/lib/x86_64-linux-gnu/pulseaudio
+      LD_LIBRARY_PATH: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/ceph
+      GDK_SCALE: ' '
     plugs:
       - audio-playback
       - audio-record
