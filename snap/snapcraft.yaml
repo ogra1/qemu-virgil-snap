@@ -66,7 +66,7 @@ apps:
     command: usr/bin/qemu-system-aarch64
     command-chain: [bin/runner]
     environment:
-      LD_LIBRARY_PATH: $SNAP_LIBRARY_PATH:$SNAP/lib/x86_64-linux-gnu:$SNAP/usr/lib/x86_64-linux-gnu:$SNAP/usr/lib:$SNAP/usr/lib/x86_64-linux-gnu/ceph:$SNAP/gnome-platform/usr/lib:$SNAP/gnome-platform/usr/lib/x86_64-linux-gnu:$SNAP/gnome-platform/usr/lib/x86_64-linux-gnu/pulseaudio
+      LD_LIBRARY_PATH: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/ceph
     plugs:
       - audio-playback
       - audio-record
@@ -86,7 +86,7 @@ apps:
     command: usr/bin/qemu-system-arm
     command-chain: [bin/runner]
     environment:
-      LD_LIBRARY_PATH: $SNAP_LIBRARY_PATH:$SNAP/lib/x86_64-linux-gnu:$SNAP/usr/lib/x86_64-linux-gnu:$SNAP/usr/lib:$SNAP/usr/lib/x86_64-linux-gnu/ceph:$SNAP/gnome-platform/usr/lib:$SNAP/gnome-platform/usr/lib/x86_64-linux-gnu:$SNAP/gnome-platform/usr/lib/x86_64-linux-gnu/pulseaudio
+      LD_LIBRARY_PATH: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/ceph
     plugs:
       - audio-playback
       - audio-record
@@ -135,6 +135,11 @@ parts:
       - --enable-sdl
       - --enable-spice
       - --enable-xfsctl
+      - --enable-kvm
+      - --enable-opengl
+      - --disable-user
+      - --enable-virglrenderer
+      - --enable-smartcard
     build-environment:
       - ACLOCAL_PATH: /usr/share/aclocal
       - PKG_CONFIG_PATH: $SNAPCRAFT_STAGE/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pkgconfig:/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pkgconfig:/usr/lib/pkgconfig:/usr/share/pkgconfig
