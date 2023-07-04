@@ -113,6 +113,9 @@ parts:
     source: https://gitlab.freedesktop.org/virgl/virglrenderer.git
     source-tag: virglrenderer-0.9.1
     source-depth: 1
+# ext:updatesnap
+#   version-format:
+#     format: 'virglrenderer-%M.%m.%R'
     plugin: meson
     meson-parameters:
       - --prefix=/usr
@@ -272,6 +275,7 @@ parts:
     override-build: |
       mkdir -p $CRAFT_PART_INSTALL/bin
       cp -av runner $CRAFT_PART_INSTALL/bin/
+
   smbd:
     after: [ runner ]
     plugin: nil
@@ -307,13 +311,14 @@ parts:
       - usr/lib/$CRAFT_ARCH_TRIPLET/libwbclient.so*
       - usr/lib/$CRAFT_ARCH_TRIPLET/samba/*
       - usr/sbin/smbd
+
   cleanup:
     after: [ smbd ]
     plugin: nil
-    build-snaps: [ gnome-3-38-2004 ]
+    build-snaps: [ gnome-42-2204 ]
     override-prime: |
       set -eux
-      cd /snap/gnome-3-38-2004/current
+      cd /snap/gnome-42-2204/current
       find . -type f,l -exec rm -f $CRAFT_PRIME/{} \;
       for CRUFT in bug lintian man; do
         rm -rf $CRAFT_PRIME/usr/share/$CRUFT
