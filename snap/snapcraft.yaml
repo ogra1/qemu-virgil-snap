@@ -1,4 +1,4 @@
-name: qemu-virgil-tmp-work
+name: qemu-virgil
 adopt-info: qemu
 base: core22
 summary: QEMU as a snap, built from latest git with some fancy graphics extras
