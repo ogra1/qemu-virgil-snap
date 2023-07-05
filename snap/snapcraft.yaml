@@ -1,4 +1,4 @@
-name: qemu-virgil
+name: qemu-virgil-tmp-work
 adopt-info: qemu
 base: core22
 summary: QEMU as a snap, built from latest git with some fancy graphics extras
@@ -45,7 +45,7 @@ apps:
     command: usr/bin/qemu-system-x86_64
     command-chain: [bin/runner]
     environment:
-      LD_LIBRARY_PATH: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/ceph
+      LD_LIBRARY_PATH: $SNAP/usr/lib:$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET:$SNAP/lib:$SNAP/lib/$CRAFT_ARCH_TRIPLET:$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/ceph
       GDK_SCALE: ' '
     plugs:
       - audio-playback
@@ -66,7 +66,7 @@ apps:
     command: usr/bin/qemu-system-aarch64
     command-chain: [bin/runner]
     environment:
-      LD_LIBRARY_PATH: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/ceph
+      LD_LIBRARY_PATH: ${LD_LIBRARY_PATH:+$LD_LIBRARY_PATH:}$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/ceph
     plugs:
       - audio-playback
       - audio-record
@@ -86,7 +86,7 @@ apps:
     command: usr/bin/qemu-system-arm
     command-chain: [bin/runner]
     environment:
-      LD_LIBRARY_PATH: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/ceph
+      LD_LIBRARY_PATH: ${LD_LIBRARY_PATH:+$LD_LIBRARY_PATH:}$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/ceph
     plugs:
       - audio-playback
       - audio-record
@@ -109,7 +109,17 @@ apps:
       - removable-media
 
 parts:
+  snapbuildtools:
+    source: https://github.com/sergio-costas/snap-build-tools.git
+    source-depth: 1
+    plugin: nil
+    build-snaps: [ gnome-42-2204, core22, gtk-common-themes ]
+    override-pull: |
+      craftctl default
+      $CRAFT_PART_SRC/install
+
   virgl:
+    after: [snapbuildtools]
     source: https://gitlab.freedesktop.org/virgl/virglrenderer.git
     source-tag: virglrenderer-0.9.1
     source-depth: 1
@@ -122,6 +132,7 @@ parts:
     build-packages:
       - libgbm-dev
       - libdrm-dev
+
   qemu:
     after: [ virgl ]
     source: https://gitlab.com/qemu-project/qemu.git
@@ -149,6 +160,7 @@ parts:
       - PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/snapcraft/current/bin/scriptlet-bin:$PATH
       - LD_LIBRARY_PATH: $CRAFT_STAGE/usr/lib/$CRAFT_ARCH_TRIPLET:/usr/lib/$CRAFT_ARCH_TRIPLET${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
     override-build: |
+      $CRAFT_PROJECT_DIR/snapbuildtools/remove_common.py core22 gtk-common-themes gnome-42-2204
       craftctl default
       craftctl set version=$(git describe --tags --abbrev=10)
     build-packages:
@@ -268,6 +280,7 @@ parts:
       # Remove cruft
       - -usr/share/qemu/qemu-nsis.bmp
       - -lib/systemd/system/multipath-tools-boot.service
+
   runner:
     after: [ qemu ]
     source: .
@@ -284,6 +297,9 @@ parts:
       - python3-talloc
       - samba
       - samba-libs
+    override-pull: |
+      $CRAFT_PROJECT_DIR/snapbuildtools/remove_common.py core22 gtk-common-themes gnome-42-2204
+      craftctl default
     prime:
       - usr/lib/$CRAFT_ARCH_TRIPLET/libdcerpc.so*
       - usr/lib/$CRAFT_ARCH_TRIPLET/libdcerpc-binding.so*
@@ -315,11 +331,8 @@ parts:
   cleanup:
     after: [ smbd ]
     plugin: nil
-    build-snaps: [ gnome-42-2204 ]
     override-prime: |
       set -eux
-      cd /snap/gnome-42-2204/current
-      find . -type f,l -exec rm -f $CRAFT_PRIME/{} \;
       for CRUFT in bug lintian man; do
         rm -rf $CRAFT_PRIME/usr/share/$CRUFT
       done
