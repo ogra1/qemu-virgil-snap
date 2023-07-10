@@ -38,6 +38,8 @@ layout:
     bind: $SNAP/usr/share/seabios
   /usr/share/qemu:
     bind: $SNAP/usr/share/qemu
+  /usr/share/OVMF:
+    bind: $SNAP/usr/share/OVMF
 
 apps:
   qemu-virgil:
@@ -271,6 +273,7 @@ parts:
       - libxentoollog1
       - libxss1
       - multipath-tools
+      - ovmf
       - seabios
     prime:
       # Fix execstack warnings
