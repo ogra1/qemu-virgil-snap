@@ -1,6 +1,6 @@
 name: qemu-virgil
 adopt-info: qemu
-base: core22
+base: core24
 summary: QEMU as a snap, built from latest git with some fancy graphics extras
 description: |
   The latest QEMU as a snap package with GTK, SDL2 and Virgil 3D enabled
@@ -27,8 +27,9 @@ description: |
 grade: stable
 confinement: strict
 
-architectures:
-  - build-on: [ amd64 ]
+platforms:
+  amd64:
+    build-on: [ amd64 ]
 
 
 layout:
@@ -123,7 +124,7 @@ parts:
   virgl:
     after: [snapbuildtools]
     source: https://gitlab.freedesktop.org/virgl/virglrenderer.git
-    source-tag: virglrenderer-0.9.1
+    source-tag: virglrenderer-0.10.4
     source-depth: 1
 # ext:updatesnap
 #   version-format:
@@ -138,19 +139,17 @@ parts:
   qemu:
     after: [ virgl ]
     source: https://gitlab.com/qemu-project/qemu.git
-    source-tag: v6.2.0
+    source-tag: v9.0.2
     source-depth: 1
     plugin: autotools
     autotools-configure-parameters:
       - --prefix=/usr
       - --target-list=x86_64-softmmu,aarch64-softmmu,arm-softmmu
       - --audio-drv-list=pa,sdl
-      - --enable-jemalloc
       - --enable-libusb
       - --enable-usb-redir
       - --enable-sdl
       - --enable-spice
-      - --enable-xfsctl
       - --enable-kvm
       - --enable-opengl
       - --disable-user
@@ -161,9 +160,6 @@ parts:
       - PKG_CONFIG_PATH: $CRAFT_STAGE/usr/lib/$CRAFT_ARCH_TRIPLET/pkgconfig:/usr/lib/$CRAFT_ARCH_TRIPLET/pkgconfig:/usr/lib/pkgconfig:/usr/share/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}
       - PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/snapcraft/current/bin/scriptlet-bin:$PATH
       - LD_LIBRARY_PATH: $CRAFT_STAGE/usr/lib/$CRAFT_ARCH_TRIPLET:/usr/lib/$CRAFT_ARCH_TRIPLET${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
-    override-pull: |
-      craftctl default
-      git apply $CRAFT_PROJECT_DIR/patches/fix-mouse.diff
     override-build: |
       $CRAFT_PROJECT_DIR/snapbuildtools/remove_common.py core22 gtk-common-themes gnome-42-2204
       craftctl default
@@ -221,7 +217,7 @@ parts:
     stage-packages:
       - ipxe-qemu
       - ipxe-qemu-256k-compat-efi-roms
-      - libaio1
+      - libaio1t64
       - libasn1-8-heimdal
       - libboost-iostreams1.74.0
       - libboost-thread1.74.0
@@ -233,8 +229,8 @@ parts:
       - libgfrpc0
       - libgfxdr0
       - libglusterfs0
+      - libhcrypto5t64-heimdal
       - libgssapi3-heimdal
-      - libhcrypto4-heimdal
       - libheimbase1-heimdal
       - libheimntlm0-heimdal
       - libhx509-5-heimdal
@@ -242,15 +238,15 @@ parts:
       - libiscsi7
       - libjemalloc2
       - libkrb5-26-heimdal
-      - libldap-2.5-0
-      - libnfs13
+      - libldap2
+      - libnfs14
       - libnghttp2-14
       - libnuma1
       - libopus0
       - librados2
       - librbd1
       - librdmacm1
-      - libroken18-heimdal
+      - libroken19t64-heimdal
       - librtmp1
       - libsasl2-2
       - libsdl2-2.0-0
@@ -270,7 +266,7 @@ parts:
       - libxenevtchn1
       - libxenforeignmemory1
       - libxengnttab1
-      - libxenmisc4.16
+      - libxenmisc4.17t64
       - libxenstore4
       - libxentoolcore1
       - libxentoollog1
