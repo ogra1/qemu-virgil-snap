@@ -156,6 +156,7 @@ parts:
       - --disable-user
       - --enable-virglrenderer
       - --enable-smartcard
+      - --enable-slirp
     build-environment:
       - ACLOCAL_PATH: /usr/share/aclocal
       - PKG_CONFIG_PATH: $CRAFT_STAGE/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/pkgconfig:/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/pkgconfig:/usr/lib/pkgconfig:/usr/share/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}
@@ -199,6 +200,7 @@ parts:
       - libseccomp-dev
       - libsdl2-dev
       - libsdl2-image-dev
+      - libslirp-dev
       - libsnappy-dev
       - libspice-protocol-dev
       - libspice-server-dev
@@ -254,6 +256,7 @@ parts:
       - libsasl2-2
       - libsdl2-2.0-0
       - libsdl2-image-2.0-0
+      - libslirp0
       - libsnappy1v5
       - libsndio7.0
       - libspice-server1
